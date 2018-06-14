@@ -2,7 +2,7 @@
 layout:     post
 title:      在Sublime中使用Markdown
 subtitle:   Sublime+Markdown+实时预览
-date:       2017-07-10
+date:       2018-01-09
 author:     BY
 header-img: img/post-bg-universe.jpg
 catalog: true
