@@ -24,7 +24,7 @@ Sublime Text 是一款流行的代码编辑器软件，也是HTML和散文先进
    说白了就是一个类似插件管理包的小工具，我们可以通过使用它来搜索、安装和卸载等相关插件，Package Control的安装过程很简单，下面提供Sublime Text3 和 Sublime Text2 的安装方式。
    使用Ctrl+`快捷键或者通过View->Show Console菜单打开命令行，粘贴如下代码：
    
-   1、Sublime Text3
+  1、Sublime Text3
 
    ```
     import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read())
