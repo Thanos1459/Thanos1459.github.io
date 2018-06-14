@@ -1,3 +1,15 @@
+---
+layout:     post
+title:      在Sublime中使用Markdown
+subtitle:   Sublime+Markdown+实时预览
+date:       2017-07-10
+author:     BY
+header-img: img/post-bg-universe.jpg
+catalog: true
+tags:
+    - 工具
+---
+
 ## 引言
 这两天想找一款比较好的markdown编辑器，找来找去觉得还是sublime比较给力,我们只需要庄上两个插件就可以很爽的使用它了，下面我们先介绍一下Sublime Text
 
@@ -5,8 +17,7 @@
 Sublime Text 是一款流行的代码编辑器软件，也是HTML和散文先进的文本编辑器，可运行在Linux，Windows和Mac OS X,同时也是我许多程序员最喜欢使用的一款文本编辑器软件，没有之一。他有强大的插件功能，我们可以按照自己的需求来添加各种插件。
 
 ## Sublimet Text3 使用 MarkDown 界面
-
-
+![](https://raw.githubusercontent.com/cropwatchman/cropwatchman.github.io/master/img/Sublime%2BMarkDown.JPG)
 ## 安装过程
 
 ### 安装Package Control
