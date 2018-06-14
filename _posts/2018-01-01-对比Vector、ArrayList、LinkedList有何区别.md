@@ -1,7 +1,7 @@
 ---
 layout:     post
-title:      对比Vector、ArrayList、LinkedList有何区别
-subtitle:   list不同实现的差异
+title:      list不同实现的差异
+subtitle:   对比Vector、ArrayList、LinkedList有何区别
 date:       2018-01-01
 author:     BY
 header-img: img/post-bg-keybord.jpg
