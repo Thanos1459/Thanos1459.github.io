@@ -151,7 +151,9 @@ void linkLast(E e) {
 我们可以看到 Java 的集合框架，Collection 接口是所有集合的根，然后扩展开提供了三大类集合，分别是：
 
 >* List，也就是我们前面介绍最多的有序集合，它提供了方便的访问、插入、删除等操作。
+
 >* Set，Set 是不允许重复元素的，这是和 List 最明显的区别，也就是不存在两个对象 equals返回 true。我们在日常开发中有很多需要保证元素唯一性的场合。
+
 >* Queue/Deque，则是 Java 提供的标准队列结构的实现，除了集合的基本功能，它还支持类似先入先出（FIFO， First-in-First-Out）或者后入先出（LIFO，Last-In-First-Out）等特定行为。这里不包括 BlockingQueue，因为通常是并发编程场合，所以被放置在并发包里。
 
 每种集合的通用逻辑，都被抽象到相应的抽象类之中，比如AbstractList就集中了各种List操作的通用部分。这些集合不是完全孤立的，比如，LinkedList 本身，既是 List，也是 Deque
@@ -172,7 +174,8 @@ void linkLast(E e) {
 ```
 
 就像前面提到过的，我们需要对各种具体集合实现，至少了解基本特征和典型使用场景，以 Set的几个实现为例：
-TreeSet 支持自然顺序访问，但是添加、删除、包含等操作要相对低效（log(n)时间）。HashSet则是利用哈希算法，理想情况下，如果哈希散列正常，可以提供常数时间的添加、删除、包含等操作，但是它不保证有序。LinkedHashSet，内部构建了一个记录插入顺序的双向链表，因此提供了按照插入顺序遍历的能力，与此同时，也保证了常数时间的添加、删除、包含等操作，这些操作性能略低于HashSet，因为需要维护链表的开销。在遍历元素时，HashSet 性能受自身容量影响，所以初始化时，除非有必要，不然不要将其背后的HashMap容量设置过大。而对于LinkedHashSet，由于其内部链表提供的方便，遍历性能只和元素多少有关系。我今天介绍的这些集合类，都不是线程安全的，对于 java.util.concurrent里面的线程安全容器，我在专栏后面会去介绍。但是，并不代表这些集合完全不能支持并发编程的场景，在Collections 工具类中，提供了一系列的 synchronized 方法，比如
+    TreeSet 支持自然顺序访问，但是添加、删除、包含等操作要相对低效（log(n)时间）。HashSet则是利用哈希算法，理想情况下，如果哈希散列正常，可以提供常数时间的添加、删除、包含等操作，但是它不保证有序。LinkedHashSet，内部构建了一个记录插入顺序的双向链表，因此提供了按照插入顺序遍历的能力，与此同时，也保证了常数时间的添加、删除、包含等操作，这些操作性能略低于HashSet，因为需要维护链表的开销。在遍历元素时，HashSet 性能受自身容量影响，所以初始化时，除非有必要，不然不要将其背后的HashMap容量设置过大。而对于LinkedHashSet，由于其内部链表提供的方便，遍历性能只和元素多少有关系。我今天介绍的这些集合类，都不是线程安全的，对于 java.util.concurrent里面的线程安全容器，我在专栏后面会去介绍。但是，并不代表这些集合完全不能支持并发编程的场景，在Collections 工具类中，提供了一系列的 synchronized 方法，比如
+
 ```java
 static <T> List<T> synchronizedList(List<T> list)
 ```
@@ -187,6 +190,7 @@ List list = Collections.synchronizedList(new ArrayList());
 
 ### 其它
 在 Java 9 中，Java 标准类库提供了一系列的静态工厂方法，比如，List.of()、Set.of()，大大简化了构建小器实例的代码量。根据业界实践经验，我们发现相当一部分集合实例都是容量非常有限的，而且在生命周期中并不会进行修改。但是，在原有的 Java 类库中，我们可能不得不写成：
+
 ```java
 ArrayList<String> list = new ArrayList<>();
 list.add("Hello");
@@ -194,6 +198,7 @@ list.add("World");
 ```
 
 而利用新的容器静态工厂方法，一句代码就够了，并且保证了不可变性。
+
 ```java
 List<String> simpleList = List.of("Hello","world");
 ```
