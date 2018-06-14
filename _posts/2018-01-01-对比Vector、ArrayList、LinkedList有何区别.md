@@ -10,12 +10,15 @@ tags:
     - java
 ---
 
-
-##引言
+## 引言
 这三者都是实现集合框架中的List，也就是所谓的有序集合，因此具体功能也比较近似，比如都提供按照位置进行定位、添加或者删除的操作，都提供迭代器以遍历其内容等。但因为具体的设计区别，在行为、性能、线程安全等方面，表现又有很大不同，接下来就来探讨一下其中的差异。
-##实现方式不同
-###Vector
+
+## 实现方式不同
+
+### Vector
+
 Verctor 是 Java 早期提供的线程安全的动态数组，如果不需要线程安全，并不建议选择，毕竟同步是有额外开销的。Vector内部是使用对象数组来保存数据，可以根据需要自动的增加容量，当数组已满时，会创建新的数组，并拷贝原有数组数据。
+
 ```java
 
 //如果不指定扩容增量则数组扩容一倍
@@ -47,8 +50,11 @@ public synchronized int indexOf(Object o, int index) {
 
 
 ```
-###ArrayList
+
+### ArrayList
+
 ArrayList 是应用更加广泛的动态数组实现，它本身不是线程安全的，所以性能要好很多。与Vector近似，ArrayList 也是可以根据需要调整容量，不过两者的调整逻辑有所区别，Vector在扩容时会提高1倍，而ArrayList则是增加 50%。ArrayList在执行插入元素是超过当前数组预定义的最大值时，数组需要扩容，扩容过程需要调用底层System.arraycopy()方法进行大量的数组复制操作；在删除元素时并不会减少数组的容量（如果需要缩小数组容量,可以调用trimToSize()方法）
+
 ```java
 //被用于空实例的共享空数组实例
 private static final Object[] EMPTY_ELEMENTDATA = {};
@@ -86,8 +92,11 @@ private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {};
 }
 
 ```
-###LinkedList 
+
+### LinkedList 
+
 LinkedList 顾名思义是 Java提供的双向链表，所以它不需要像上面两种那样调整容量，它也不是线程安全的,LinkedList在插入元素时，须建一个新的Entry对象，并更新相应元素的前后元素的引用；在查找元素时，需遍历链表；在删除元素时，要遍历链表，找到要删除的元素，然后从链表上将此元素删除即可
+
 ```java
 //添加元素
 public boolean add(E e) {
@@ -125,21 +134,25 @@ void linkLast(E e) {
 }
 
 ```
-##适用场景不同
->* Vector 和 ArrayList 作为动态数组，其内部元素以数组形式顺序存储的，所以非常适合随机访问的场合。除了尾部插入和删除元素，往往性能会相对较差，比如我们在中间位置插入一个元素，需要移动后续所有元素。
+
+## 适用场景不同
+
+> * Vector 和 ArrayList 作为动态数组，其内部元素以数组形式顺序存储的，所以非常适合随机访问的场合。除了尾部插入和删除元素，往往性能会相对较差，比如我们在中间位置插入一个元素，需要移动后续所有元素。
 >* LinkedList由于基于链表方式存放数据，增加和删除元素的速度较快，但是检索速度较慢。
 
 所以，在应用开发中，如果事先可以估计到，应用操作是偏向于插入、删除，还是随机访问较多，就可以针对性的进行选择。这也是面试最常见的一个考察角度，给定一个场景，选择适合的数据结构。
-##扩展
-###集合框架结构图
+
+## 扩展
+
+### 集合框架结构图
 ![collection-structure](https://github.com/cropwatchman/cropwatchman.github.io/blob/master/img/2018-01-01-Collection.png)
 ![collection-structure](https://github.com/cropwatchman/cropwatchman.github.io/blob/master/img/2018-01-01-map.png)
+
 我们可以看到 Java 的集合框架，Collection 接口是所有集合的根，然后扩展开提供了三大类集合，分别是：
+
 >* List，也就是我们前面介绍最多的有序集合，它提供了方便的访问、插入、删除等操作。
 >* Set，Set 是不允许重复元素的，这是和 List 最明显的区别，也就是不存在两个对象 equals返回 true。我们在日常开发中有很多需要保证元素唯一性的场合。
->* Queue/Deque，则是 Java 提供的标准队列结构的实现，除了集合的基本功能，它还支持类
-似先入先出（FIFO， First-in-First-Out）或者后入先出（LIFO，Last-In-First-Out）等特
-定行为。这里不包括 BlockingQueue，因为通常是并发编程场合，所以被放置在并发包里。
+>* Queue/Deque，则是 Java 提供的标准队列结构的实现，除了集合的基本功能，它还支持类似先入先出（FIFO， First-in-First-Out）或者后入先出（LIFO，Last-In-First-Out）等特定行为。这里不包括 BlockingQueue，因为通常是并发编程场合，所以被放置在并发包里。
 
 每种集合的通用逻辑，都被抽象到相应的抽象类之中，比如AbstractList就集中了各种List操作的通用部分。这些集合不是完全孤立的，比如，LinkedList 本身，既是 List，也是 Deque
 
@@ -165,13 +178,14 @@ static <T> List<T> synchronizedList(List<T> list)
 ```
 
 我们完全可以利用类似方法来实现基本的线程安全集合：
+
 ```java
 List list = Collections.synchronizedList(new ArrayList());
 ```
 
 它的实现，基本就是将每个基本方法，比如get、set、add之类，都通过synchronizd添加基本的同步支持，非常单粗暴，但也非常实用。注意这些方法创建的线程安全集合，都符合迭代时fail-fast行为，当发生意外的并发尽早抛出ConcurrentModificationException 异常，以避免不可预计的行为。
 
-###其它
+### 其它
 在 Java 9 中，Java 标准类库提供了一系列的静态工厂方法，比如，List.of()、Set.of()，大大简化了构建小器实例的代码量。根据业界实践经验，我们发现相当一部分集合实例都是容量非常有限的，而且在生命周期中并不会进行修改。但是，在原有的 Java 类库中，我们可能不得不写成：
 ```java
 ArrayList<String> list = new ArrayList<>();
